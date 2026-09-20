@@ -3,54 +3,44 @@
 ## Sumário
 
 1. [O que é LCP?](#1-o-que-é-lcp)
-2. [O que pode ser o elemento LCP?](#2-o-que-pode-ser-o-elemento-lcp)
-3. [Como interpretar o resultado?](#3-como-interpretar-o-resultado)
-4. [O que o LCP realmente mede?](#4-o-que-o-lcp-realmente-mede)
-5. [Por que o LCP é importante?](#5-por-que-o-lcp-é-importante)
-6. [O LCP depende apenas do frontend?](#6-o-lcp-depende-apenas-do-frontend)
-7. [Principais fatores que podem influenciar o LCP](#7-principais-fatores-que-podem-influenciar-o-lcp)
-8. [TTFB](#8-ttfb)
-9. [Load Delay](#9-load-delay)
-10. [Load Time](#10-load-time)
-11. [Render Delay](#11-render-delay)
-12. [As fases do LCP](#12-as-fases-do-lcp)
-13. [Modelo mental para investigar LCP](#modelo-mental-para-investigar-lcp)
+2. [Como interpretar o resultado?](#2-como-interpretar-o-resultado)
+3. [O que o LCP mede?](#3-o-que-o-lcp-mede)
+4. [Principais fatores que influenciam o LCP](#4-principais-fatores-que-influenciam-o-lcp)
+5. [Como o LCP é decomposto?](#5-como-o-lcp-é-decomposto)
+6. [Como investigar um LCP alto?](#6-como-investigar-um-lcp-alto)
+7. [Ferramentas](#7-ferramentas)
+8. [Modelo mental](#8-modelo-mental)
+9. [Resumo](#9-resumo)
 
 ---
 
-## 1. O que é LCP?
+# 1. O que é LCP?
 
-**LCP (Largest Contentful Paint)** é uma métrica dos **Core Web Vitals** que mede quanto tempo leva para o maior elemento de conteúdo relevante e visível na viewport aparecer.
+**LCP (Largest Contentful Paint)** é um **Core Web Vital** que mede o tempo até que o maior elemento de conteúdo elegível e visível na viewport seja renderizado.
 
 Em termos simples:
 
-> **Quanto tempo o usuário espera até o principal conteúdo visual da página aparecer?**
+> **Quanto tempo o usuário espera até o principal conteúdo visual aparecer?**
 
-O LCP começa a ser medido durante o carregamento da página e considera os elementos elegíveis que aparecem na área visível.
+Exemplo:
 
----
+```text id="xq7v2m"
+Navegação
+    ↓
+Carregamento
+    ↓
+Processamento
+    ↓
+Renderização
+    ↓
+LCP
+```
 
-## 2. O que pode ser o elemento LCP?
-
-O elemento registrado como LCP pode variar de acordo com a página. Exemplos:
-
-* imagem;
-* imagem de capa/hero;
-* banner;
-* título;
-* bloco de texto;
-* conteúdo visual relevante;
-* vídeo ou outro elemento elegível.
-
-O candidato ao LCP pode mudar durante o carregamento. O navegador acompanha os candidatos e registra aquele que, entre os elegíveis, representa o maior conteúdo relevante visível.
-
-> **Importante:** o LCP não significa simplesmente "o maior elemento da página".
+O LCP é uma métrica de **carregamento percebido**, não de carregamento completo da página.
 
 ---
 
-## 3. Como interpretar o resultado?
-
-Os valores de referência são:
+# 2. Como interpretar o resultado?
 
 | LCP                   | Classificação    |
 | --------------------- | ---------------- |
@@ -60,379 +50,105 @@ Os valores de referência são:
 
 Exemplos:
 
-* `1,8s` → bom
-* `2,4s` → bom
-* `2,9s` → precisa melhorar
-* `3,8s` → precisa melhorar
-* `4,5s` → ruim
-
-### O resultado não explica a causa
-
-Um LCP de `3,8s` informa **o que aconteceu**, mas não **por que aconteceu**.
-
-Para investigar, precisamos descobrir onde o tempo foi gasto:
-
-```text
-LCP alto
-   ↓
-Onde o tempo foi gasto?
-   ↓
-┌─────────────────┐
-│ TTFB            │ → resposta começou tarde?
-├─────────────────┤
-│ Load Delay      │ → recurso foi descoberto tarde?
-├─────────────────┤
-│ Load Time       │ → recurso demorou para baixar?
-├─────────────────┤
-│ Render Delay    │ → estava pronto, mas demorou para aparecer?
-└─────────────────┘
+```text id="5e3q0c"
+1,8 s → Bom
+2,4 s → Bom
+2,9 s → Precisa melhorar
+3,8 s → Precisa melhorar
+4,5 s → Ruim
 ```
+
+O valor do LCP mostra **quanto tempo levou**, mas não explica a causa.
+
+Por exemplo:
+
+```text id="g7y4pa"
+LCP = 3,8 s
+```
+
+Para investigar, precisamos descobrir **onde esses 3,8 segundos foram gastos**.
+
 ---
 
-## 4. O que o LCP realmente mede?
+# 3. O que o LCP mede?
 
-O LCP mede o tempo necessário para que o maior conteúdo elegível e visível seja renderizado.
+O LCP mede o tempo até que o maior conteúdo **elegível e visível** seja renderizado.
 
-Ele **não mede**:
+O elemento LCP pode variar durante o carregamento. Alguns exemplos de candidatos incluem:
 
-* o carregamento completo da página;
+* imagem;
+* imagem de destaque;
+* bloco de texto;
+* título;
+* banner;
+* outros elementos elegíveis.
+
+> **LCP não significa simplesmente "o maior elemento da página".**
+
+O LCP **não mede**:
+
+* carregamento completo da página;
 * todas as imagens;
 * todo o JavaScript;
-* toda a aplicação;
-* o momento em que tudo terminou de carregar;
-* a responsividade da página;
-* a estabilidade visual.
+* tempo para toda a aplicação terminar;
+* responsividade;
+* estabilidade visual.
 
 Por isso:
 
-> **A página pode continuar carregando depois que o LCP aconteceu.**
-
-O LCP é principalmente uma **métrica de resultado**.
-
-A investigação vem depois:
-
-```text
+```text id="v1s6qr"
 LCP
  ↓
-Resultado
- ↓
-Investigar causa
+Conteúdo principal apareceu
 ```
----
 
-## 5. Por que o LCP é importante?
+A página pode continuar carregando depois que o LCP acontece.
 
-O LCP ajuda a avaliar a experiência de carregamento percebida pelo usuário.
+Também é possível ter:
 
-Ele faz parte dos **Core Web Vitals**:
-
-| Métrica | O que avalia                       |
-| ------- | ---------------------------------- |
-| **LCP** | Carregamento/percepção do conteúdo |
-| **INP** | Responsividade às interações       |
-| **CLS** | Estabilidade visual                |
-
-Um LCP alto pode estar relacionado a diferentes partes da aplicação.
-
-Não devemos assumir que:
-
-> "LCP alto = problema de frontend."
-
-Ele pode envolver:
-
-* backend;
-* rede;
-* CDN;
-* descoberta do recurso;
-* tamanho do recurso;
-* JavaScript;
-* CSS;
-* renderização;
-* dispositivo.
-
----
-
-## 6. O LCP depende apenas do frontend?
-
-Não.
-
-O carregamento pode ser entendido como uma cadeia:
-
-```text
-Navegação
-   ↓
-Servidor responde
-   ↓
-TTFB
-   ↓
-Recurso LCP é descoberto
-   ↓
-Recurso começa a carregar
-   ↓
-Download
-   ↓
-Processamento
-   ↓
-Renderização
-   ↓
-LCP
+```text id="9l5xmw"
+LCP → Bom
+INP → Ruim
 ```
-Por isso, investigar LCP significa olhar para diferentes camadas:
 
-### Backend
-
-* tempo de processamento;
-* banco de dados;
-* APIs;
-* cache;
-* CDN;
-* infraestrutura.
-
-### Rede
-
-* latência;
-* velocidade da conexão;
-* localização;
-* quantidade de dados transferidos.
-
-### Frontend
-
-* HTML;
-* CSS;
-* JavaScript;
-* descoberta de recursos;
-* renderização;
-* tarefas longas.
-
-### Dispositivo
-
-* capacidade de processamento;
-* memória;
-* velocidade do CPU;
-* condições reais do usuário.
+Nesse caso, o conteúdo pode aparecer rapidamente, mas a interface ainda pode responder lentamente às interações.
 
 ---
 
-## 7. Principais fatores que podem influenciar o LCP
+# 4. Principais fatores que influenciam o LCP
 
-Podemos organizar os fatores em quatro grupos:
+O LCP pode ser influenciado por diferentes camadas da aplicação.
 
-| Grupo           | Exemplos                                  |
-| --------------- | ----------------------------------------- |
-| **Backend**     | TTFB, servidor, banco, APIs, cache        |
-| **Rede**        | latência, conexão, CDN, transferência     |
-| **Frontend**    | HTML, CSS, JS, React, renderização        |
-| **Dispositivo** | CPU, memória, capacidade de processamento |
+| Fator            | Exemplos                                  |
+| ---------------- | ----------------------------------------- |
+| **Backend**      | servidor, banco, APIs, cache              |
+| **Rede**         | latência, conexão, CDN                    |
+| **Frontend**     | HTML, CSS, JavaScript, React              |
+| **Recursos**     | imagens, fontes, tamanho, formato         |
+| **Renderização** | estilos, layout, paint                    |
+| **Dispositivo**  | CPU, memória, capacidade de processamento |
 
-Também podemos investigar especificamente:
+Também podemos investigar:
 
 * quando o recurso LCP foi descoberto;
 * quando começou a carregar;
 * quanto tempo levou para baixar;
-* tamanho do recurso;
-* formato;
-* compressão;
-* bloqueios de renderização;
-* tarefas longas no Main Thread;
-* processamento de JavaScript;
-* cálculo de estilos;
-* layout;
-* pintura.
+* se dependia de JavaScript;
+* se havia bloqueio de renderização;
+* se existiam Long Tasks;
+* se o Main Thread estava ocupado.
+
+> **LCP alto não significa automaticamente problema de frontend.**
+
+A investigação deve considerar **backend, rede, frontend e dispositivo**.
 
 ---
 
-## 8. TTFB
+# 5. Como o LCP é decomposto?
 
-**TTFB (Time to First Byte)** mede quanto tempo passa desde o início da requisição até o recebimento do primeiro byte da resposta.
+Para investigar um LCP alto, podemos dividir o carregamento em etapas:
 
-```text
-Requisição
-    ↓
-Servidor processa
-    ↓
-Primeiro byte chega
-    ↓
-TTFB
-```
-### O que pode influenciar o TTFB?
-
-* latência da rede;
-* processamento do servidor;
-* banco de dados;
-* APIs externas;
-* geração dinâmica do HTML;
-* cache;
-* CDN;
-* localização do usuário;
-* infraestrutura.
-
-### TTFB ≠ LCP
-
-TTFB não é o LCP.
-
-Um TTFB alto pode **contribuir para um LCP alto**, porque o navegador precisa receber a resposta antes de continuar determinadas etapas do carregamento.
-
-### Ao investigar
-
-Pergunte:
-
-* O servidor está demorando?
-* Existe cache?
-* A CDN está sendo utilizada?
-* O usuário está distante da infraestrutura?
-* O problema acontece apenas em determinadas regiões?
-* O resultado é observado em laboratório ou em usuários reais?
-
----
-
-## 9. Load Delay
-
-**Load Delay** é o tempo entre o início do carregamento da página e o momento em que o recurso que se torna o LCP começa a ser carregado.
-
-A pergunta principal é:
-
-> **Por que o navegador demorou para começar a carregar o recurso LCP?**
-
-Exemplo:
-
-```text
-Página começa
-     ↓
-HTML é processado
-     ↓
-Recurso LCP ainda não foi descoberto
-     ↓
-Recurso é descoberto
-     ↓
-Download começa
-```
-O período anterior ao início do download é o **Load Delay**.
-
-### Possíveis causas
-
-* recurso aparece tarde no HTML;
-* recurso depende de JavaScript;
-* elemento é criado dinamicamente;
-* descoberta acontece após outros processamentos;
-* prioridade de carregamento;
-* recurso não está facilmente identificável pelo navegador.
-
-### Ao investigar
-
-Verifique:
-
-* Quando o recurso foi descoberto?
-* Quando a requisição começou?
-* Ele estava no HTML inicial?
-* Depende de JavaScript?
-* Foi inserido dinamicamente?
-* Existe algum processamento antes da descoberta?
-
----
-
-## 10. Load Time
-
-**Load Time** representa o tempo necessário para o recurso LCP ser transferido depois que seu carregamento começa.
-
-```text
-Requisição começa
-      ↓
-Download
-      ↓
-Recurso termina de chegar
-```
-
-### O que pode influenciar?
-
-* tamanho do recurso;
-* quantidade de dados transferidos;
-* conexão;
-* latência;
-* servidor;
-* CDN;
-* compressão;
-* formato do arquivo;
-* versão do recurso entregue ao dispositivo.
-
-### Importante
-
-Um Load Time alto **não significa automaticamente que o arquivo é grande**.
-
-A velocidade da conexão, a latência e a infraestrutura também influenciam.
-
-### Ao investigar
-
-Pergunte:
-
-* Qual o tamanho do recurso?
-* Qual o formato?
-* Está comprimido?
-* Está sendo servido pela CDN?
-* Qual a conexão do usuário?
-* O servidor está respondendo adequadamente?
-* Existe uma versão adequada para diferentes dispositivos?
-
----
-
-## 11. Render Delay
-
-**Render Delay** representa o tempo entre o recurso estar disponível e o momento em que o navegador consegue apresentar o conteúdo como LCP.
-
-Exemplo:
-
-```text
-Recurso terminou de carregar
-        ↓
-Browser ainda está processando
-        ↓
-Estilos / Layout / JavaScript / Renderização
-        ↓
-Elemento aparece
-        ↓
-LCP
-```
-
-### Possíveis fatores
-
-* JavaScript executando no Main Thread;
-* tarefas longas;
-* cálculo de estilos;
-* layout;
-* pintura;
-* processamento da aplicação;
-* dependências que precisam ser concluídas antes da renderização.
-
-### Importante
-
-Não confunda:
-
-```text
-Load Time
-→ tempo para o recurso chegar
-
-Render Delay
-→ tempo para o conteúdo aparecer depois que o recurso está disponível
-```
-
-### Ferramenta de investigação
-
-No **Chrome DevTools → Performance**, podemos observar:
-
-* Main Thread;
-* JavaScript;
-* Long Tasks;
-* Style Calculation;
-* Layout;
-* Paint;
-* Rendering.
-
----
-
-## 12. As fases do LCP
-
-Para investigação, podemos usar este modelo simplificado:
-
-```text
+```text id="q7a5nk"
 Navegação
     ↓
 TTFB
@@ -446,81 +162,288 @@ Render Delay
 LCP
 ```
 
-Exemplo:
+Essa decomposição ajuda a descobrir **onde o tempo foi gasto**.
 
-```text
-TTFB          = 0,5s
-Load Delay    = 0,4s
-Load Time     = 1,0s
-Render Delay  = 0,3s
--------------------
-LCP           = 2,2s
-```
+### TTFB
 
-Esse modelo ajuda a responder:
+**TTFB (Time to First Byte)** representa o tempo até o primeiro byte da resposta chegar ao navegador.
 
-| Pergunta                                                   | Fase             |
-| ---------------------------------------------------------- | ---------------- |
-| A resposta começou tarde?                                  | **TTFB**         |
-| O recurso foi descoberto tarde?                            | **Load Delay**   |
-| O recurso demorou para baixar?                             | **Load Time**    |
-| O recurso já estava disponível, mas demorou para aparecer? | **Render Delay** |
+Pode ser influenciado por:
 
-### Por que essa divisão é importante?
+* latência;
+* processamento do servidor;
+* banco de dados;
+* APIs;
+* cache;
+* CDN;
+* infraestrutura.
 
-Duas páginas podem ter o mesmo LCP, mas problemas completamente diferentes.
+> **TTFB não é um Core Web Vital e não é o LCP.**
 
-```text
-Página A
-
-TTFB          ████████
-Load Delay    ██
-Load Time     ██
-Render Delay  █
-              ↓
-             LCP
-```
-
-```text
-Página B
-
-TTFB          █
-Load Delay    ██
-Load Time     ████████
-Render Delay  ██
-              ↓
-             LCP
-```
-
-As duas podem apresentar o mesmo resultado final, mas a investigação será diferente.
-
-> **LCP responde "quanto tempo levou".**
->
-> **A análise das fases ajuda a responder "onde esse tempo foi gasto".**
+Um TTFB alto pode contribuir para um LCP alto.
 
 ---
 
-## Modelo mental para investigar LCP
+### Load Delay
 
-Sempre que encontrar um LCP alto, siga esta sequência:
+É o período entre o início do carregamento e o momento em que o recurso que se torna o LCP começa a ser carregado.
 
-```text
-1. Qual foi o valor do LCP?
-          ↓
-2. Qual elemento foi o LCP?
-          ↓
-3. Quando ele foi descoberto?
-          ↓
-4. Quando começou a carregar?
-          ↓
-5. Quanto tempo levou para baixar?
-          ↓
-6. Quando ficou disponível?
-          ↓
-7. O que atrasou a renderização?
-          ↓
-8. Qual camada está contribuindo?
-          ↓
-Backend / Rede / Frontend / Dispositivo
+Pergunta principal:
+
+> **Por que o recurso LCP demorou para ser descoberto?**
+
+Possíveis causas:
+
+* recurso descoberto tarde;
+* dependência de JavaScript;
+* elemento criado dinamicamente;
+* processamento anterior à descoberta;
+* prioridade de carregamento.
+
+---
+
+### Load Time
+
+Representa o tempo necessário para transferir o recurso depois que seu carregamento começou.
+
+Pode ser influenciado por:
+
+* tamanho do recurso;
+* conexão;
+* latência;
+* CDN;
+* compressão;
+* formato;
+* servidor.
+
+Um Load Time alto não significa necessariamente que o recurso é apenas "grande".
+
+---
+
+### Render Delay
+
+É o tempo entre o recurso estar disponível e o momento em que o navegador consegue apresentar o conteúdo como LCP.
+
+Pode envolver:
+
+* JavaScript;
+* Long Tasks;
+* cálculo de estilos;
+* Layout;
+* Paint;
+* renderização do framework;
+* processamento na Main Thread.
+
+A diferença principal é:
+
+```text id="xv0j5z"
+Load Time
+→ recurso demorou para chegar
+
+Render Delay
+→ recurso chegou, mas demorou para aparecer
 ```
-> **Não basta saber que o LCP está ruim. É preciso descobrir em qual etapa do carregamento o tempo está sendo gasto.**
+
+### Modelo simplificado
+
+```text id="2m3q7w"
+LCP
+ ↓
+TTFB
++
+Load Delay
++
+Load Time
++
+Render Delay
+```
+
+Essa decomposição é um **modelo de investigação**. Ela ajuda a identificar a etapa que mais contribuiu para o tempo observado.
+
+---
+
+# 6. Como investigar um LCP alto?
+
+Use esta sequência:
+
+```text id="l3w8ca"
+LCP alto
+   ↓
+Qual foi o valor?
+   ↓
+Qual elemento foi o LCP?
+   ↓
+Quando ele foi descoberto?
+   ↓
+Quando começou a carregar?
+   ↓
+Quanto tempo levou para baixar?
+   ↓
+Quando ficou disponível?
+   ↓
+O que atrasou a renderização?
+   ↓
+Qual camada está contribuindo?
+```
+
+Durante a investigação, procure:
+
+### Backend
+
+* TTFB;
+* processamento do servidor;
+* cache;
+* APIs;
+* CDN.
+
+### Rede
+
+* latência;
+* conexão;
+* transferência;
+* tamanho dos recursos.
+
+### Frontend
+
+* JavaScript;
+* CSS;
+* descoberta de recursos;
+* renderização;
+* Long Tasks.
+
+### Dispositivo
+
+* CPU;
+* memória;
+* capacidade de processamento.
+
+A pergunta principal é:
+
+> **Em qual etapa o LCP está perdendo tempo?**
+
+---
+
+# 7. Ferramentas
+
+### PageSpeed Insights
+
+Permite consultar dados de performance e Core Web Vitals, incluindo dados de campo quando disponíveis.
+
+### Lighthouse
+
+Útil para testes de laboratório e análise de performance em um ambiente controlado.
+
+### Chrome DevTools — Performance
+
+Ajuda a investigar o que aconteceu durante o carregamento.
+
+Podemos observar:
+
+* Main Thread;
+* JavaScript;
+* Long Tasks;
+* Rendering;
+* Layout;
+* Paint;
+* eventos de carregamento.
+
+### Chrome DevTools — Network
+
+Ajuda a investigar:
+
+* requisições;
+* TTFB;
+* tamanho dos recursos;
+* tempo de transferência;
+* prioridade;
+* recursos bloqueados ou atrasados.
+
+### CrUX
+
+Fornece dados de experiência de usuários reais para páginas e origens elegíveis.
+
+### Web Vitals
+
+Pode ser utilizado para medir Core Web Vitals no contexto da aplicação e coletar dados de usuários reais.
+
+---
+
+# 8. Modelo mental
+
+Quando encontrar um LCP alto, pense:
+
+```text id="m0h7xs"
+LCP alto
+   ↓
+Qual elemento foi o LCP?
+   ↓
+Foi descoberto tarde?
+   ↓
+Load Delay
+   ↓
+Demorou para chegar?
+   ↓
+Load Time
+   ↓
+Demorou para aparecer?
+   ↓
+Render Delay
+   ↓
+O servidor começou tarde?
+   ↓
+TTFB
+```
+
+De forma ainda mais simples:
+
+```text id="q4d8np"
+LCP alto
+   ↓
+Resposta começou tarde?
+   ↓
+Recurso foi descoberto tarde?
+   ↓
+Recurso demorou para chegar?
+   ↓
+Recurso demorou para aparecer?
+```
+
+> **LCP é o resultado. A investigação consiste em descobrir onde o tempo foi gasto.**
+
+---
+
+# 9. Resumo
+
+```text id="w6z1rf"
+LCP
+ ↓
+Carregamento percebido
+ ↓
+Maior conteúdo elegível e visível
+ ↓
+Tempo até o conteúdo aparecer
+```
+
+Para investigar:
+
+```text id="p2c9va"
+TTFB
+  ↓
+Load Delay
+  ↓
+Load Time
+  ↓
+Render Delay
+  ↓
+LCP
+```
+
+> **LCP responde "quanto tempo levou". A decomposição ajuda a responder "onde esse tempo foi gasto".**
+
+## Core Web Vitals
+
+| Métrica | O que representa    | Unidade       |
+| ------- | ------------------- | ------------- |
+| **LCP** | Carregamento        | segundos      |
+| **INP** | Responsividade      | milissegundos |
+| **CLS** | Estabilidade visual | sem unidade   |
