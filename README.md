@@ -1,5 +1,3 @@
-Claro — este é o `README.md` atualizado e alinhado ao padrão que definimos para LCP, INP e CLS.
-
 # Web Performance
 
 Repositório de estudos sobre **Web Performance**, com foco em entender como medir, interpretar e investigar o desempenho de aplicações web.
