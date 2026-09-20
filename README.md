@@ -1,10 +1,16 @@
+Claro — este é o `README.md` atualizado e alinhado ao padrão que definimos para LCP, INP e CLS.
+
 # Web Performance
 
-Repositório de estudos sobre **Web Performance**, com foco em entender como medir, analisar e melhorar o desempenho de aplicações web.
+Repositório de estudos sobre **Web Performance**, com foco em entender como medir, interpretar e investigar o desempenho de aplicações web.
 
 ## Objetivo
 
-Construir conhecimento prático sobre performance web, desde os principais conceitos e métricas até ferramentas de análise, diagnóstico, monitoramento e otimização.
+Construir conhecimento prático sobre performance web, desde os principais conceitos e métricas até ferramentas de medição, análise, diagnóstico, monitoramento e automação.
+
+O foco dos estudos é:
+
+> **Entender a métrica → interpretar o resultado → saber o que investigar → saber quais ferramentas usar.**
 
 ## Conteúdos
 
@@ -14,16 +20,16 @@ Construir conhecimento prático sobre performance web, desde os principais conce
 * **INP — Interaction to Next Paint**
 * **CLS — Cumulative Layout Shift**
 
-Para cada métrica:
+Para cada métrica, os estudos abordam:
 
+* O que a métrica representa
+* Como interpretar o resultado
 * O que ela mede
-* Por que é importante
-* Qual é um bom resultado
-* Como interpretar os resultados
-* Como coletar os dados
-* Principais causas de problemas
-* Como diagnosticar
-* Como otimizar
+* Principais fatores que influenciam o resultado
+* Como a métrica é calculada ou decomposta
+* Como investigar resultados altos
+* Ferramentas utilizadas na análise
+* Modelo mental para investigação
 
 ### Métricas complementares
 
@@ -31,6 +37,8 @@ Para cada métrica:
 * **TTFB — Time to First Byte**
 * **TBT — Total Blocking Time**
 * Outras métricas relevantes de performance
+
+Essas métricas complementam a análise dos Core Web Vitals e ajudam a identificar onde o tempo está sendo gasto.
 
 ## 📊 Dados de Performance
 
@@ -80,7 +88,7 @@ Estudos sobre automação de testes e coleta de métricas de performance utiliza
 
 ## Front-end e Performance
 
-Estudos relacionados ao impacto das decisões de desenvolvimento no desempenho:
+Estudos sobre o impacto das decisões de desenvolvimento no desempenho:
 
 * HTML
 * CSS
@@ -89,7 +97,6 @@ Estudos relacionados ao impacto das decisões de desenvolvimento no desempenho:
 * Carregamento de recursos
 * Imagens
 * Fontes
-* JavaScript excessivo
 * Renderização
 * Network
 * Cache
@@ -108,7 +115,15 @@ Investigação de cenários específicos de aplicações **WebView**, consideran
 * Rede
 * Dispositivo
 * Renderização
-* Impacto do ambiente do aplicativo na experiência do usuário
+* Impacto do ambiente de aplicação na experiência de performance
+
+## Core Web Vitals
+
+| Métrica | O que representa    | Unidade       |
+| ------- | ------------------- | ------------- |
+| **LCP** | Carregamento        | segundos      |
+| **INP** | Responsividade      | milissegundos |
+| **CLS** | Estabilidade visual | sem unidade   |
 
 ## Referências
 
@@ -122,5 +137,6 @@ Investigação de cenários específicos de aplicações **WebView**, consideran
 
 ## 🚧 Status
 
-Repositório em construção. Conteúdos, experimentos e exemplos serão adicionados conforme o avanço dos estudos.
+Repositório em construção.
 
+Os estudos estão sendo organizados inicialmente pelos **Core Web Vitals**, seguidos por métricas complementares, ferramentas, automação e cenários específicos de Front-end e WebView.
