@@ -1,140 +1,338 @@
 # Web Performance
 
-Repositório de estudos sobre **Web Performance**, com foco em entender como medir, interpretar e investigar o desempenho de aplicações web.
+Repositório de estudos e experimentação prática sobre Web Performance, com uma aplicação demonstrativa em Next.js, documentação sobre Core Web Vitals e testes automatizados de qualidade.
+
+## Sumário
+
+- [Objetivo](#objetivo)
+- [Core Web Vitals](#core-web-vitals)
+- [Stack utilizada](#stack-utilizada)
+- [O que foi implementado](#o-que-foi-implementado)
+- [Estrutura principal](#estrutura-principal)
+- [Como executar](#como-executar)
+- [Testes e auditorias](#testes-e-auditorias)
+- [Dashboard de qualidade](#dashboard-de-qualidade)
+- [Critérios de qualidade](#critérios-de-qualidade)
+- [Documentação das métricas](#documentação-das-métricas)
+- [Limitações conhecidas](#limitações-conhecidas)
 
 ## Objetivo
 
-Construir conhecimento prático sobre performance web, desde os principais conceitos e métricas até ferramentas de medição, análise, diagnóstico, monitoramento e automação.
+O projeto tem como objetivo estudar, medir e investigar o desempenho de aplicações web.
 
-O foco dos estudos é:
+A aplicação permite validar, em um ambiente controlado:
 
-> **Entender a métrica → interpretar o resultado → saber o que investigar → saber quais ferramentas usar.**
-
-## Conteúdos
-
-### Core Web Vitals
-
-* **LCP — Largest Contentful Paint**
-* **INP — Interaction to Next Paint**
-* **CLS — Cumulative Layout Shift**
-
-Para cada métrica, os estudos abordam:
-
-* O que a métrica representa
-* Como interpretar o resultado
-* O que ela mede
-* Principais fatores que influenciam o resultado
-* Como a métrica é calculada ou decomposta
-* Como investigar resultados altos
-* Ferramentas utilizadas na análise
-* Modelo mental para investigação
-
-### Métricas complementares
-
-* **FCP — First Contentful Paint**
-* **TTFB — Time to First Byte**
-* **TBT — Total Blocking Time**
-* Outras métricas relevantes de performance
-
-Essas métricas complementam a análise dos Core Web Vitals e ajudam a identificar onde o tempo está sendo gasto.
-
-## 📊 Dados de Performance
-
-### Dados de laboratório
-
-Medições realizadas em ambientes controlados para reproduzir e investigar problemas de performance.
-
-Ferramentas:
-
-* Lighthouse
-* Chrome DevTools
-* PageSpeed Insights
-* WebPageTest
-
-### Dados de campo
-
-Medições coletadas a partir da experiência de usuários reais.
-
-Conceitos estudados:
-
-* RUM — Real User Monitoring
-* CrUX — Chrome User Experience Report
-* `web-vitals`
-* Distribuição dos resultados
-* Percentis
-* Segmentação por dispositivo, conexão e outras condições
-
-## 🛠️ Ferramentas
-
-* **PageSpeed Insights**
-* **Lighthouse**
-* **Chrome DevTools**
-* **Chrome UX Report (CrUX)**
-* **WebPageTest**
-* **Playwright**
-* **Web Vitals**
-
-## Automação
-
-Estudos sobre automação de testes e coleta de métricas de performance utilizando **Playwright**, incluindo:
-
-* Execução automatizada de páginas
-* Coleta de métricas
-* Repetição de cenários
-* Comparação de resultados
-* Identificação de regressões de performance
-
-## Front-end e Performance
-
-Estudos sobre o impacto das decisões de desenvolvimento no desempenho:
-
-* HTML
-* CSS
-* JavaScript
-* React
-* Carregamento de recursos
-* Imagens
-* Fontes
-* Renderização
-* Network
-* Cache
-* Code splitting
-* Lazy loading
-* Bundle size
-* SPA e navegação entre rotas
-
-## WebView e Performance
-
-Investigação de cenários específicos de aplicações **WebView**, considerando:
-
-* Carregamento inicial
-* Navegação
-* Comunicação entre WebView e aplicação nativa
-* Rede
-* Dispositivo
-* Renderização
-* Impacto do ambiente de aplicação na experiência de performance
+- carregamento e renderização de uma interface web;
+- responsividade e navegação;
+- acessibilidade;
+- comportamento em diferentes contextos WebView;
+- métricas de performance;
+- consolidação dos resultados em uma dashboard de qualidade.
 
 ## Core Web Vitals
 
-| Métrica | O que representa    | Unidade       |
-| ------- | ------------------- | ------------- |
-| **LCP** | Carregamento        | segundos      |
-| **INP** | Responsividade      | milissegundos |
-| **CLS** | Estabilidade visual | sem unidade   |
+Core Web Vitals são métricas utilizadas para avaliar aspectos importantes da experiência do usuário em aplicações web.
 
-## Referências
+As principais métricas são:
 
-* [Web.dev — Performance](https://web.dev/performance/)
-* [Web.dev — Core Web Vitals](https://web.dev/explore/learn-core-web-vitals)
-* [Web.dev — Web Vitals](https://web.dev/articles/vitals)
-* [Google PageSpeed Insights](https://pagespeed.web.dev/)
-* [Chrome DevTools](https://developer.chrome.com/docs/devtools/)
-* [Chrome UX Report](https://developer.chrome.com/docs/crux/)
-* [Playwright](https://playwright.dev/)
+| Métrica | Nome | O que mede | Unidade |
+| --- | --- | --- | --- |
+| [LCP](docs/lcp/LCP.md) | Largest Contentful Paint | Velocidade de carregamento do conteúdo principal | Segundos |
+| [INP](docs/inp/INP.md) | Interaction to Next Paint | Responsividade às interações do usuário | Milissegundos |
+| [CLS](docs/cls/CLS.md) | Cumulative Layout Shift | Estabilidade visual do layout | Pontuação |
 
-## 🚧 Status
+Classificação considerada boa:
 
-Repositório em construção.
+| Métrica | Resultado bom |
+| --- | ---: |
+| LCP | Até 2,5 s |
+| INP | Até 200 ms |
+| CLS | Até 0,1 |
 
-Os estudos estão sendo organizados inicialmente pelos **Core Web Vitals**, seguidos por métricas complementares, ferramentas, automação e cenários específicos de Front-end e WebView.
+O projeto também acompanha métricas complementares:
+
+- FCP — First Contentful Paint;
+- TTFB — Time to First Byte.
+
+Essas métricas ajudam a entender onde o tempo é utilizado durante o carregamento e a renderização da aplicação.
+
+## Stack utilizada
+
+- Next.js 16;
+- React 19;
+- Material UI;
+- JavaScript com ES Modules;
+- Playwright;
+- Lighthouse;
+- axe-core;
+- ESLint;
+- Chromium.
+
+## O que foi implementado
+
+### Aplicação web
+
+- aplicação criada com Next.js App Router;
+- página principal renderizada com componentes React;
+- hero responsivo para diferentes tamanhos de viewport;
+- navegação com header e footer;
+- menu mobile;
+- barra de seleção de país;
+- seção de produtos em destaque;
+- seção com todos os produtos;
+- formulário de newsletter;
+- páginas de loading e erro;
+- imagens locais para os produtos e hero;
+- fallback local quando a API externa de produtos não está disponível;
+- desativação de scripts de terceiros durante os testes.
+
+### Dashboard de qualidade
+
+A aplicação possui uma dashboard disponível em `/dashboard`.
+
+Ela apresenta:
+
+- visão geral da saúde do projeto;
+- resultados dos testes E2E;
+- resultados de performance;
+- resultados de acessibilidade do Lighthouse;
+- resultados de acessibilidade do axe-core;
+- resultados dos perfis WebView;
+- status, pontuações, falhas e dados ausentes;
+- origem e data dos relatórios;
+- atualização dos dados sem reiniciar a aplicação.
+
+### Testes automatizados
+
+Foram implementados testes para:
+
+- homepage;
+- navegação;
+- teclado e acessibilidade básica;
+- newsletter;
+- menu responsivo;
+- dashboard;
+- performance com Lighthouse;
+- acessibilidade com Lighthouse;
+- acessibilidade com axe-core;
+- contexto WebView em três perfis Android simulados.
+
+## Estrutura principal
+
+```text
+app/
+├── api/quality/          # API dos dados consolidados
+├── dashboard/            # Página da dashboard
+├── error.js              # Tela de erro
+├── layout.js             # Layout principal
+├── loading.js            # Estado de carregamento
+└── page.js               # Página inicial
+
+components/
+├── dashboard/            # Componentes da dashboard
+└── *.js                  # Componentes da aplicação
+
+data/                     # Produtos e fixtures de teste
+docs/                     # Documentação das métricas
+lib/                      # Integrações e acesso aos dados
+public/images/            # Imagens da aplicação
+scripts/                  # Agregação e execução dos testes
+tests/
+├── audits/               # Lighthouse e axe-core
+├── e2e/                  # Testes funcionais
+├── pages/                # Page Objects
+├── support/              # Utilitários dos testes
+└── webview/              # Testes de contexto WebView
+```
+
+## Como executar
+
+### Instalar dependências
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+### Executar em desenvolvimento
+
+```bash
+npm run dev
+```
+
+A aplicação ficará disponível em:
+
+```text
+http://localhost:3000
+```
+
+### Validar o build de produção
+
+```bash
+npm run build
+npm run start
+```
+
+### Executar o lint
+
+```bash
+npm run lint
+```
+
+## Testes e auditorias
+
+Os testes utilizam um build controlado da aplicação, com produtos locais e scripts de terceiros desabilitados.
+
+### Testes E2E
+
+```bash
+npm run test:e2e
+```
+
+Cobre homepage, navegação, newsletter, teclado, menu responsivo e dashboard.
+
+### Testes WebView
+
+```bash
+npm run test:webview
+```
+
+A suíte simula três perfis:
+
+- low-end;
+- mid-end;
+- high-end.
+
+Cada perfil possui configurações próprias de viewport, densidade de pixels, user agent, touch, CPU, memória e rede.
+
+### Auditoria de performance
+
+```bash
+npm run test:performance
+```
+
+A auditoria executa três coletas independentes do Lighthouse e aplica os thresholds sobre a mediana dos resultados.
+
+### Auditorias de acessibilidade
+
+Executar Lighthouse e axe-core:
+
+```bash
+npm run test:accessibility
+```
+
+Executar somente Lighthouse:
+
+```bash
+npm run test:accessibility:lighthouse
+```
+
+Executar somente axe-core:
+
+```bash
+npm run test:accessibility:axe
+```
+
+### Executar todas as auditorias
+
+```bash
+npm run test:audits
+```
+
+### Executar a suíte completa
+
+```bash
+npm run test:all
+```
+
+O comando executa a suíte completa e consolida os resultados utilizados pela dashboard.
+
+O alias abaixo possui o mesmo comportamento:
+
+```bash
+npm run test:quality
+```
+
+## Dashboard de qualidade
+
+Primeiro, gere os relatórios:
+
+```bash
+npm run test:quality
+```
+
+Depois, inicie a dashboard:
+
+```bash
+npm run dashboard
+```
+
+Acesse:
+
+```text
+http://localhost:3000/dashboard
+```
+
+Para apenas reconstruir o resumo consolidado a partir dos relatórios existentes:
+
+```bash
+npm run dashboard:generate
+```
+
+Os relatórios são armazenados localmente em `reports/`. Esses arquivos não são versionados pelo Git.
+
+## Critérios de qualidade
+
+| Validação | Critério |
+| --- | --- |
+| Lighthouse Accessibility | Nota mínima 90 |
+| axe-core | Nenhuma violação crítica ou séria |
+| FCP | Menor que 1800 ms |
+| LCP | Menor que 2500 ms |
+| CLS | Menor que 0,1 |
+| TTFB | Menor que 800 ms |
+
+A pontuação geral da dashboard considera:
+
+- E2E: 35%;
+- performance: 30%;
+- acessibilidade Lighthouse: 15%;
+- acessibilidade axe-core: 20%.
+
+Os testes WebView funcionam como um gate complementar e não alteram a pontuação ponderada.
+
+## Documentação das métricas
+
+A documentação detalhada das principais métricas está disponível em:
+
+- [LCP — Largest Contentful Paint](docs/lcp/LCP.md);
+- [INP — Interaction to Next Paint](docs/inp/INP.md);
+- [CLS — Cumulative Layout Shift](docs/cls/CLS.md).
+
+Cada documento explica:
+
+- o que a métrica mede;
+- como interpretar o resultado;
+- os thresholds de classificação;
+- como a métrica é calculada ou decomposta;
+- principais causas de resultados ruins;
+- como investigar problemas;
+- ferramentas de medição e diagnóstico.
+
+As principais ferramentas abordadas são:
+
+- Lighthouse;
+- Chrome DevTools;
+- PageSpeed Insights;
+- CrUX;
+- Web Vitals;
+- Playwright.
+
+## Limitações conhecidas
+
+- Os testes WebView são uma emulação determinística no Chromium.
+- A emulação não substitui testes em um dispositivo Android real.
+- A integração com uma WebView Android real exige emulador ou dispositivo e uma ferramenta nativa, como Appium.
+- Os relatórios são gerados localmente e ignorados pelo Git.
+- A API externa de produtos pode falhar; nesse caso, a aplicação utiliza dados locais.
+- Os testes desabilitam scripts de terceiros para manter os resultados determinísticos.
