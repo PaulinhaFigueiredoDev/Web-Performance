@@ -1,0 +1,26 @@
+[
+  {
+    "id": "fixture-1",
+    "category": "headsets",
+    "title": "Essential VR Headset",
+    "price": 199.99,
+    "image": "/images/vr1.jpg",
+    "imageAlt": "Essential virtual reality headset"
+  },
+  {
+    "id": "fixture-2",
+    "category": "headsets",
+    "title": "Pro VR Headset",
+    "price": 349.99,
+    "image": "/images/vr2.jpg",
+    "imageAlt": "Professional virtual reality headset"
+  },
+  {
+    "id": "fixture-3",
+    "category": "headsets",
+    "title": "Elite VR Headset",
+    "price": 499.99,
+    "image": "/images/vr3.jpg",
+    "imageAlt": "Elite virtual reality headset"
+  }
+]
