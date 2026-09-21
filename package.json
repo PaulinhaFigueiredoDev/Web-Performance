@@ -1,0 +1,60 @@
+{
+  "name": "web-performance",
+  "version": "1.0.0",
+  "description": "Repositório de estudos sobre **Web Performance**, com foco em entender como medir, interpretar e investigar o desempenho de aplicações web.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "build:test": "cross-env E2E_USE_FIXTURES=true DISABLE_THIRD_PARTY=true next build",
+    "start:test": "cross-env E2E_USE_FIXTURES=true DISABLE_THIRD_PARTY=true next start -H 127.0.0.1 -p 3000",
+    "test": "playwright test --workers=1",
+    "test:e2e": "playwright test tests/e2e --workers=1",
+    "test:webview": "cross-env PLAYWRIGHT_JSON_OUTPUT_FILE=reports/playwright/webview-results.json playwright test tests/webview --workers=1",
+    "test:performance": "playwright test tests/audits/performance.spec.js --workers=1",
+    "test:accessibility:lighthouse": "playwright test tests/audits/acessibilidade.spec.js --workers=1",
+    "test:accessibility:axe": "playwright test tests/audits/acessibilidade.axe.spec.js --workers=1",
+    "test:accessibility": "playwright test tests/audits/acessibilidade.spec.js tests/audits/acessibilidade.axe.spec.js --workers=1",
+    "test:audits": "playwright test tests/audits --workers=1",
+    "test:all": "node scripts/run-quality-tests.js",
+    "test:quality": "node scripts/run-quality-tests.js",
+    "dashboard": "next dev -p 3000",
+    "dashboard:generate": "node scripts/aggregate-quality-reports.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulinhaFigueiredoDev/Web-Performance.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/PaulinhaFigueiredoDev/Web-Performance/issues"
+  },
+  "homepage": "https://github.com/PaulinhaFigueiredoDev/Web-Performance#readme",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "chrome-launcher": "^1.2.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.5",
+    "lighthouse": "^13.5.0"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^9.4.0",
+    "@mui/material-nextjs": "^9.4.0",
+    "next": "^16.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}
